@@ -1,21 +1,27 @@
 <script>
 
 import De from './De.vue'
+import Joueur from './Joueur.vue'
 
 export default {
   name: 'Jeu',
   components: {
-    De
+    De, Joueur
   }, 
   data() {
     return {
-      count:0, 	
+      count:0,
+      message: "Bienvenue !", 
       des: [  
         { id:0, valeur:0, relance: true },
         { id:1, valeur:0, relance: true },
         { id:2, valeur:0, relance: true },
         { id:3, valeur:0, relance: true },
         { id:4, valeur:0, relance: true }
+      ], 
+      joueurs: [
+        { id:20, prenom:"Théo", libelle: true },
+        { id:21, prenom:"Arthur", libelle: false } 
       ]}
   }, 
   methods: {
@@ -41,6 +47,13 @@ export default {
         this.des[i].valeur = 0
         this.des[i].relance = true; 
       }
+    },
+    setFigure(payload) {
+      var x = [] 
+      for (let i=0; i < 5; i++) {
+        x.push(this.des[i].valeur)
+      }
+      this.message = "Le joueur "+payload.joueur+" choisit la figure "+payload.figure_description+" pour les dés ..."+x.join('.') 
     }
   }
 }
@@ -49,14 +62,20 @@ export default {
 
 <template>
 	<div>
-		<button v-on:click="clearJeu"> Nouveau </button>
 
-		<button v-on:click="lancerDes">Lancer Dés</button>
+    <h1> Jeu {{ $route.params.id }} </h1> 
 
-		<hr>
-		Mon jeu - nombre de lancer : {{count}} / 3
-    <br> 
 		<De v-for="de in des" :key="de.id" v-bind:id="de.id" v-bind:valeur="de.valeur" v-bind:relance="de.relance" @toggle-de="changeDeStatut"> </De> 
+
+    <button v-on:click="lancerDes">Lancer {{count}} / 3</button>
 		
+
+    <hr style="clear:both;"> 
+    <div> {{message}} </div> 
+    <br><br>
+    <Joueur v-for="j in joueurs" :key="j.id" v-bind:id="j.id" v-bind:prenom="j.prenom" v-bind:libelle="j.libelle" @set-figure="setFigure"> </Joueur> 
+
+
+
 	</div>
 </template> 

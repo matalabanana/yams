@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
-import PartieDetail from '../components/PartieDetail'
 import Jeu from '../components/Jeu'
 
 
@@ -9,8 +8,7 @@ Vue.use(VueRouter)
 
 const routes = [
   { path: '/', name: 'Home', component: Home },
-  { path: '/start', component: Jeu },
-  { path: '/partie/:id', component: PartieDetail },
+  { path: '/jeu/:id', component: Jeu },
   {
     path: '/about',
     name: 'About',

@@ -3,8 +3,9 @@
 export default {
   name: 'Joueur',
   props: {
-    prenom:  { type: String , required: true}, 
-    libelle: { type: Boolean, default: false}, 
+    id:      { type: Number, required: true }, 
+    prenom:  { type: String , required: true }, 
+    libelle: { type: Boolean, default: false }, 
   }, 
   data() {
     return {
@@ -37,6 +38,9 @@ export default {
     changeDeStatut(payload) {
       console.log('change le statut de '+payload.idex)
       this.des[payload.idex].relance = ! this.des[payload.idex].relance
+    },
+    emitSetFigure(id) {
+      this.$emit('set-figure', { joueur: this.id, figure:id , figure_description: this.resultats[id].description }); 
     }
   }
 }
@@ -49,7 +53,13 @@ export default {
 		<table style="border:1px dashed;margin-right:20px;"> 
 			<tr v-for="x in resultats" :key="x.id">
 				<td> <label v-if="libelle">{{x.description }} </label></td>
-          <td style="min-width: 50px;"> {{x.pt >= 0 ? x.pt : '&nbsp;'}} </td>
+          <td style="min-width: 50px;"> 
+
+            {{x.pt >= 0 ? x.pt : ''}} 
+
+            <div v-if="x.pt < 0"> <a @click="emitSetFigure(x.id)">choisir</a> </div>
+
+          </td>
 			</tr>
 		</table> 
 
