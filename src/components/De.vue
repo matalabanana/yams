@@ -18,9 +18,8 @@ export default {
 
 
 <template>
-	<div v-bind:class="{actif : relance}"> 
-		Dé {{valeur>0 ? valeur : '?'}}  
-		<button @click="emitToggleDe"> {{relance ? 'relance' : 'garde'}} </button> 
+	<div class="deCarre" v-bind:class="{keep : !relance}" @click="emitToggleDe"> 
+		{{valeur>0 ? valeur : '&nbsp;'}}  
 	</div>
 </template> 
 
@@ -28,5 +27,6 @@ export default {
 
 
 <style>
-	.actif { color:red; }
+	.keep { background:green; }
+	.deCarre { font-size: 40px; cursor:pointer; border: 1px solid grey; padding: 5px; margin: 5px; float: left; }
 </style> 

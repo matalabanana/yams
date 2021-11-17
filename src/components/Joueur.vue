@@ -3,7 +3,8 @@
 export default {
   name: 'Joueur',
   props: {
-    prenom: { type: String , required: true}, 
+    prenom:  { type: String , required: true}, 
+    libelle: { type: Boolean, default: false}, 
   }, 
   data() {
     return {
@@ -45,10 +46,10 @@ export default {
 <template>
 	<div>
 		<b>{{prenom}}</b>
-		<table> 
+		<table style="border:1px dashed;margin-right:20px;"> 
 			<tr v-for="x in resultats" :key="x.id">
-				<td> {{x.description}} </td>
-          <td> {{x.pt}} </td>
+				<td> <label v-if="libelle">{{x.description }} </label></td>
+          <td style="min-width: 50px;"> {{x.pt >= 0 ? x.pt : '&nbsp;'}} </td>
 			</tr>
 		</table> 
 

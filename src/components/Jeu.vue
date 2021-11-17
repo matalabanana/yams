@@ -9,7 +9,6 @@ export default {
   }, 
   data() {
     return {
-      pointBrelan:30, 
       count:0, 	
       des: [  
         { id:0, valeur:0, relance: true },
@@ -31,7 +30,17 @@ export default {
     }, 
     changeDeStatut(payload) {
       console.log('change le statut de '+payload.idex)
-      this.des[payload.idex].relance = ! this.des[payload.idex].relance
+      if (this.des[payload.idex].valeur == 0) {
+        this.des[payload.idex].relance = true;
+      } else {
+        this.des[payload.idex].relance = ! this.des[payload.idex].relance
+      }
+    },
+    clearJeu() {
+      for (let i=0; i < 5; i++) {
+        this.des[i].valeur = 0
+        this.des[i].relance = true; 
+      }
     }
   }
 }
@@ -40,21 +49,14 @@ export default {
 
 <template>
 	<div>
-		Nombre de joueurs <input type="text" class="form-control"> 
-		<br>
-		<!--<button class="btn btn-success">Démarrer le jeu </button>  -->
+		<button v-on:click="clearJeu"> Nouveau </button>
 
 		<button v-on:click="lancerDes">Lancer Dés</button>
 
 		<hr>
-		<ul> Mon jeu - nombre de lancer : {{count}} / 3
-			<li v-for="de in des" :key="de.id">
-				<De v-bind:id="de.id" v-bind:valeur="de.valeur" v-bind:relance="de.relance" @toggle-de="changeDeStatut"> </De> 
-			</li>
-		</ul> 
-
-		Point du Brelan : {{pointBrelan}} 
-
-
+		Mon jeu - nombre de lancer : {{count}} / 3
+    <br> 
+		<De v-for="de in des" :key="de.id" v-bind:id="de.id" v-bind:valeur="de.valeur" v-bind:relance="de.relance" @toggle-de="changeDeStatut"> </De> 
+		
 	</div>
 </template> 

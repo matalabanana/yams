@@ -12,7 +12,9 @@ export default {
 <template>
 	<div>
     Affichage ici de la partie Partie: {{ $route.params.id }}
-    <Joueur prenom="Gérard"> </Joueur>
+    <hr> 
+    <div style="float: left"> <Joueur prenom="Théo" libelle="true"> </Joueur> </div>
+    <div style="float: left"> <Joueur prenom="Manon"> </Joueur> </div>
   </div>
   
 </template> 
