@@ -65,16 +65,38 @@ export default {
 
     <h1> Jeu {{ $route.params.id }} </h1> 
 
+    <table>
+    <tr>
 		<De v-for="de in des" :key="de.id" v-bind:id="de.id" v-bind:valeur="de.valeur" v-bind:relance="de.relance" @toggle-de="changeDeStatut"> </De> 
+    </tr>
+    </table> 
 
     <button v-on:click="lancerDes">Lancer {{count}} / 3</button>
 		
 
-    <hr style="clear:both;"> 
+    <h2> Table des points </h2>
     <div> {{message}} </div> 
     <br><br>
+    <table class="table">
+    <tr><th>Joueur </th>
+      <th>1</th> 
+      <th>2</th> 
+      <th>3</th> 
+      <th>4</th> 
+      <th>5</th> 
+      <th>6</th> 
+      <th title="Paire, 20 points">Paire</th> 
+      <th title="Brelan, 30 points">Br.</th> 
+    </tr> 
     <Joueur v-for="j in joueurs" :key="j.id" v-bind:id="j.id" v-bind:prenom="j.prenom" v-bind:libelle="j.libelle" @set-figure="setFigure"> </Joueur> 
+    </table> 
 
+
+    <hr style="clear:both;"> 
+    Reste à <ul>
+      <li> inclure Bootstrap </li>
+      <li> le clic sur choisir enregistre le jeu </li>
+    </ul> 
 
 
 	</div>

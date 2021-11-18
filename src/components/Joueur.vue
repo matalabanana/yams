@@ -4,7 +4,7 @@ export default {
   name: 'Joueur',
   props: {
     id:      { type: Number, required: true }, 
-    prenom:  { type: String , required: true }, 
+    prenom:  { type: String}, 
     libelle: { type: Boolean, default: false }, 
   }, 
   data() {
@@ -23,7 +23,9 @@ export default {
         { id:10, pt:-1, description:'Grande suite'},  // 40 points
         { id:11, pt:-1, description:'Yams'},          // 50 points
         { id:12, pt:-1, description:'Chance'},        // somme des 5 dés
-      ]}
+      ], 
+      edite: true
+    }
   }, 
   methods: {
     lancerDes() {
@@ -41,6 +43,9 @@ export default {
     },
     emitSetFigure(id) {
       this.$emit('set-figure', { joueur: this.id, figure:id , figure_description: this.resultats[id].description }); 
+    },
+    editePrenom(b) {
+      this.edite = b 
     }
   }
 }
@@ -48,20 +53,22 @@ export default {
 
 
 <template>
-	<div>
-		<b>{{prenom}}</b>
-		<table style="border:1px dashed;margin-right:20px;"> 
-			<tr v-for="x in resultats" :key="x.id">
-				<td> <label v-if="libelle">{{x.description }} </label></td>
-          <td style="min-width: 50px;"> 
+  <tr> 
+    <td>
 
-            {{x.pt >= 0 ? x.pt : ''}} 
+      <b v-show="!edite" @click="editePrenom(true)">{{prenom}}</b> 
 
-            <div v-if="x.pt < 0"> <a @click="emitSetFigure(x.id)">choisir</a> </div>
+      <div v-show="edite">
+        <input type="text" v-model="prenom">  
+        <button class="" @click="editePrenom(false)">ok </button>
+      </div>
 
-          </td>
-			</tr>
-		</table> 
 
-	</div>
+    </td>
+    <td v-for="x in resultats" :key="x.id"> 
+      {{x.pt >= 0 ? x.pt : ''}} 
+      <div v-if="x.pt < 0"> <a @click="emitSetFigure(x.id)">_</a> </div>
+    </td>
+    <td class="text-end"> 0 </td> 
+  </tr> 
 </template> 
