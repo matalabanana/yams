@@ -3,8 +3,7 @@
 export default {
   name: 'Joueur',
   props: {
-    id:      { type: Number, required: true }, 
-    prenom:  { type: String}, 
+    prenom:  { type: String, default: "Nouveau joueur"}, 
     libelle: { type: Boolean, default: false }, 
   }, 
   data() {

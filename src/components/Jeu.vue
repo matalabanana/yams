@@ -11,7 +11,7 @@ export default {
   data() {
     return {
       count:0,
-      message: "Bienvenue !", 
+      editionPrenom: false, 
       des: [  
         { id:0, valeur:0, relance: true },
         { id:1, valeur:0, relance: true },
@@ -19,10 +19,8 @@ export default {
         { id:3, valeur:0, relance: true },
         { id:4, valeur:0, relance: true }
       ], 
-      joueurs: [
-        { id:20, prenom:"Théo", libelle: true },
-        { id:21, prenom:"Arthur", libelle: false } 
-      ]}
+      joueurs: [] 
+    }
   }, 
   methods: {
     lancerDes() {
@@ -56,12 +54,16 @@ export default {
       this.message = "Le joueur "+payload.joueur+" choisit la figure "+payload.figure_description+" pour les dés ..."+x.join('.') 
     }, 
     editPrenom(payload) {
+      this.editionPrenom = true; 
       console.log('modification prénom '+payload.joueur); 
       this.joueurs.forEach( function(j) {
         if (j.id==payload.joueur) {
           j.prenom = "Gustave"; 
         }
       }); 
+    }, 
+    ajouteJoueur() {
+      this.joueurs.push({})
     }
   }
 }
@@ -79,35 +81,38 @@ export default {
     </tr>
     </table> 
 
-    <button v-on:click="lancerDes">Lancer {{count}} / 3</button>
-		
+    <button class="btn btn-warning" v-on:click="lancerDes">Lancer {{count}} / 3</button>
+    <br> <br>
+    <button class="btn btn-success" @click="ajouteJoueur"> Ajouter un joueur </button> 
 
-    <h2> Table des points </h2>
-    <div> {{message}} </div> 
-    <br><br>
+    <div v-show="editionPrenom">
+      <input placeholder="Nom du joueur"> 
+      <button class="btn btn-success"> ok </button> 
+    </div>
+		
     <table class="table">
     <tr><th>Joueur </th>
-      <th>1</th> 
-      <th>2</th> 
-      <th>3</th> 
-      <th>4</th> 
-      <th>5</th> 
-      <th>6</th> 
+      <th title="">1</th> 
+      <th title="">2</th> 
+      <th title="">3</th> 
+      <th title="">4</th> 
+      <th title="">5</th> 
+      <th title="">6</th> 
+      <th title="Bonus de +35 si +63 pts">Bonus ?</th> 
       <th title="Paire, 20 points">Paire</th> 
       <th title="Brelan, 30 points">Br.</th> 
+      <th title="Carré, 40 points">Carré</th> 
+      <th title="Full, 25 points">Full</th> 
+      <th title="Petite suite, 30 points">P.S.</th> 
+      <th title="Grande suite, 40 points">G.S.</th> 
+      <th title="Yam's, 50 points">Yam's</th> 
+      <th title="Total des 5 dés">Chance</th> 
+      <th title="">Total</th> 
     </tr> 
-    <Joueur v-for="j in joueurs" :key="j.id" v-bind:id="j.id" v-bind:prenom="j.prenom" v-bind:libelle="j.libelle" 
+    <Joueur v-for="(j,idx) in joueurs" :key="idx" v-bind:prenom="j.prenom" v-bind:libelle="j.libelle" 
       @edit-prenom="editPrenom"
       @set-figure="setFigure"> </Joueur> 
     </table> 
-
-
-    <hr style="clear:both;"> 
-    Reste à <ul>
-      <li> inclure Bootstrap </li>
-      <li> le clic sur choisir enregistre le jeu </li>
-    </ul> 
-
 
 	</div>
 </template> 
