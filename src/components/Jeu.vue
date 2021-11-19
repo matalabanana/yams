@@ -54,6 +54,14 @@ export default {
         x.push(this.des[i].valeur)
       }
       this.message = "Le joueur "+payload.joueur+" choisit la figure "+payload.figure_description+" pour les dés ..."+x.join('.') 
+    }, 
+    editPrenom(payload) {
+      console.log('modification prénom '+payload.joueur); 
+      this.joueurs.forEach( function(j) {
+        if (j.id==payload.joueur) {
+          j.prenom = "Gustave"; 
+        }
+      }); 
     }
   }
 }
@@ -88,7 +96,9 @@ export default {
       <th title="Paire, 20 points">Paire</th> 
       <th title="Brelan, 30 points">Br.</th> 
     </tr> 
-    <Joueur v-for="j in joueurs" :key="j.id" v-bind:id="j.id" v-bind:prenom="j.prenom" v-bind:libelle="j.libelle" @set-figure="setFigure"> </Joueur> 
+    <Joueur v-for="j in joueurs" :key="j.id" v-bind:id="j.id" v-bind:prenom="j.prenom" v-bind:libelle="j.libelle" 
+      @edit-prenom="editPrenom"
+      @set-figure="setFigure"> </Joueur> 
     </table> 
 
 

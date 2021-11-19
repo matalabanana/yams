@@ -44,8 +44,9 @@ export default {
     emitSetFigure(id) {
       this.$emit('set-figure', { joueur: this.id, figure:id , figure_description: this.resultats[id].description }); 
     },
-    editePrenom(b) {
-      this.edite = b 
+    emitEditPrenom() {
+      this.$emit('edit-prenom', { joueur: this.id }); 
+      console.log('demande édition prénom '+this.prenom); 
     }
   }
 }
@@ -55,15 +56,7 @@ export default {
 <template>
   <tr> 
     <td>
-
-      <b v-show="!edite" @click="editePrenom(true)">{{prenom}}</b> 
-
-      <div v-show="edite">
-        <input type="text" v-model="prenom">  
-        <button class="" @click="editePrenom(false)">ok </button>
-      </div>
-
-
+      <b @click="emitEditPrenom">{{prenom}}</b> 
     </td>
     <td v-for="x in resultats" :key="x.id"> 
       {{x.pt >= 0 ? x.pt : ''}} 
