@@ -18,7 +18,7 @@ export default {
 
 
 <template>
-	<div class="deCarre" v-bind:class="{keep : !relance}" @click="emitToggleDe"> 
+	<div class="deCarre" v-bind:class="{'bg-secondary' : !relance}" @click="emitToggleDe"> 
 		{{valeur>0 ? valeur : '&nbsp;'}}  
 	</div>
 </template> 
@@ -27,6 +27,5 @@ export default {
 
 
 <style>
-	.keep { background:green; }
 	.deCarre { font-size: 40px; cursor:pointer; border: 1px solid grey; padding: 5px; margin: 5px; float: left; }
 </style> 
