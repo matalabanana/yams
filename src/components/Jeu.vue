@@ -11,7 +11,8 @@ export default {
   data() {
     return {
       count:0,
-      editionPrenom: false, 
+      lamain:0, // joueur qui lance 
+      message: '', 
       des: [  
         { id:0, valeur:0, relance: true },
         { id:1, valeur:0, relance: true },
@@ -19,51 +20,44 @@ export default {
         { id:3, valeur:0, relance: true },
         { id:4, valeur:0, relance: true }
       ], 
-      joueurs: [] 
+      joueurs: [
+        { prenom: 'Sarah', points:[-1] }
+      ] 
     }
   }, 
   methods: {
     lancerDes() {
       console.log('relance les dés éventuels... lecture du statut actuel et modif éventuelle'); 
-      this.count++;
-      for (let i=0; i < 5; i++) {
-        if (this.des[i].relance) {
-          this.des[i].valeur = 1 + Math.floor(Math.random() * 6); 
+      if (this.count<3) {
+        for (let i=0; i < 5; i++) {
+          if (this.des[i].relance) {
+            this.des[i].valeur = 1 + Math.floor(Math.random() * 6); 
+          }
         }
+        this.count++;
       }
     }, 
     changeDeStatut(payload) {
       console.log('change le statut de '+payload.idex)
-      if (this.des[payload.idex].valeur == 0) {
-        this.des[payload.idex].relance = true;
-      } else {
+      if (this.des[payload.idex].valeur > 0) {
         this.des[payload.idex].relance = ! this.des[payload.idex].relance
       }
     },
-    clearJeu() {
+    setFigure(payload) {
+      var x = 0 
+      for (let i=0; i < 5; i++) {
+        x = x + this.des[i].valeur
+      }
+      this.message = "Attribue le choix "+payload.figure+" au joueur "+payload.joueur 
+      this.joueurs[payload.joueur].points.push(x); 
+      this.count = 0; 
       for (let i=0; i < 5; i++) {
         this.des[i].valeur = 0
         this.des[i].relance = true; 
       }
-    },
-    setFigure(payload) {
-      var x = [] 
-      for (let i=0; i < 5; i++) {
-        x.push(this.des[i].valeur)
-      }
-      this.message = "Le joueur "+payload.joueur+" choisit la figure "+payload.figure_description+" pour les dés ..."+x.join('.') 
-    }, 
-    editPrenom(payload) {
-      this.editionPrenom = true; 
-      console.log('modification prénom '+payload.joueur); 
-      this.joueurs.forEach( function(j) {
-        if (j.id==payload.joueur) {
-          j.prenom = "Gustave"; 
-        }
-      }); 
     }, 
     ajouteJoueur() {
-      this.joueurs.push({})
+      this.joueurs.push({prenom: 'John', points:[-1]})
     }
   }
 }
@@ -76,7 +70,7 @@ export default {
     <h1> Jeu {{ $route.params.id }} </h1> 
 
     <table>
-    <tr>
+    <tr ref="cinqDes">
 		<De v-for="de in des" :key="de.id" v-bind:id="de.id" v-bind:valeur="de.valeur" v-bind:relance="de.relance" @toggle-de="changeDeStatut"> </De> 
     </tr>
     </table> 
@@ -84,14 +78,9 @@ export default {
     <button class="btn btn-warning" v-on:click="lancerDes">Lancer {{count}} / 3</button>
     <br> <br>
     <button class="btn btn-success" @click="ajouteJoueur"> Ajouter un joueur </button> 
-
-    <div v-show="editionPrenom">
-      <input placeholder="Nom du joueur"> 
-      <button class="btn btn-success"> ok </button> 
-    </div>
 		
-    <table class="table">
-    <tr><th>Joueur </th>
+    <table class="table" v-if="joueurs.length>0" style="margin-top:50px;"> 
+    <tr><th>  </th><th>  </th>
       <th title="">1</th> 
       <th title="">2</th> 
       <th title="">3</th> 
@@ -109,10 +98,17 @@ export default {
       <th title="Total des 5 dés">Chance</th> 
       <th title="">Total</th> 
     </tr> 
-    <Joueur v-for="(j,idx) in joueurs" :key="idx" v-bind:prenom="j.prenom" v-bind:libelle="j.libelle" 
-      @edit-prenom="editPrenom"
+    <Joueur v-for="(j,idx) in joueurs" :key="idx" 
+      v-bind:id="idx" 
+      v-bind:marques="j.points" 
+      v-bind:prenom="j.prenom" 
       @set-figure="setFigure"> </Joueur> 
     </table> 
+
+    <div> {{message}} </div>
+
+
+
 
 	</div>
 </template> 

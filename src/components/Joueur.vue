@@ -3,31 +3,17 @@
 export default {
   name: 'Joueur',
   props: {
-    prenom:  { type: String, default: "Nouveau joueur"}, 
-    libelle: { type: Boolean, default: false }, 
+    id: { type: Number , required: true}, 
+    marques: { type: Array, required: true}, 
+    prenom: { type: String }
   }, 
   data() {
     return {
-      resultats: [  
-        { id: 0, pt:-1, description:'1'},  
-        { id: 1, pt:-1, description:'2'},  
-        { id: 2, pt:-1, description:'3'},  
-        { id: 3, pt:-1, description:'4'},  
-        { id: 4, pt:-1, description:'5'},  
-        { id: 5, pt:-1, description:'6'},  
-        { id: 6, pt:-1, description:'Brelan'},        // somme des 3 dés 
-        { id: 7, pt:-1, description:'Carré'},         // somme des 4 dés 
-        { id: 8, pt:-1, description:'Full'},          // 25 points
-        { id: 9, pt:-1, description:'Petite suite'},  // 30 points
-        { id:10, pt:-1, description:'Grande suite'},  // 40 points
-        { id:11, pt:-1, description:'Yams'},          // 50 points
-        { id:12, pt:-1, description:'Chance'},        // somme des 5 dés
-      ], 
-      edite: true
+      editable: false, 
     }
   }, 
   methods: {
-    lancerDes() {
+    lancerDes: function() {
       console.log('relance les dés éventuels... lecture du statut actuel et modif éventuelle'); 
       this.count++;
       for (let i=0; i < 5; i++) {
@@ -41,11 +27,15 @@ export default {
       this.des[payload.idex].relance = ! this.des[payload.idex].relance
     },
     emitSetFigure(id) {
-      this.$emit('set-figure', { joueur: this.id, figure:id , figure_description: this.resultats[id].description }); 
+      this.$emit('set-figure', { figure:id , joueur:this.id }); 
     },
-    emitEditPrenom() {
-      this.$emit('edit-prenom', { joueur: this.id }); 
-      console.log('demande édition prénom '+this.prenom); 
+    givefocus() {
+      console.log('donne le focus'); 
+      this.$refs.zonetxt.focus(); 
+    }, 
+    editePrenom() {
+      this.editable = true; 
+      this.marques.forEach(x => console.log(x));
     }
   }
 }
@@ -54,12 +44,18 @@ export default {
 
 <template>
   <tr> 
+    <td class="text-end">{{id}}</td> 
     <td>
-      <b @click="emitEditPrenom">{{prenom}}</b> 
+      <b v-show="!editable" @click="editePrenom">{{prenom}}</b> 
+      <div v-show="editable">
+        <input type="text" v-model="prenom" ref="zonetxt"> 
+        <button class="btn btn-secondary" @click="editable=false"> ok </button> 
+        <button class="btn btn-secondary" @click="givefocus"> focus </button> 
+      </div>
     </td>
-    <td v-for="x in resultats" :key="x.id"> 
-      {{x.pt >= 0 ? x.pt : ''}} 
-      <div v-if="x.pt < 0"> <a @click="emitSetFigure(x.id)">_</a> </div>
+    <td v-for="(x, idx) in marques" :key="idx"> 
+      {{x >= 0 ? x : ''}}  
+      <div v-if="x<0"> <a @click="emitSetFigure(idx)">_</a> </div>
     </td>
     <td class="text-end"> 0 </td> 
   </tr> 
